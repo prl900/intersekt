@@ -94,7 +94,18 @@ func (l *Loop) Segmentize(maxDist float64) *Loop {
 func (l *Loop) Transform(projStr string) *Loop {
 	pts := l.Vertices
 
-	proj4go.Forwards(projStr, pts)
+	ppts := make([]proj4go.Point, len(pts))
+	for i, p := range pts {
+		ppts[i].X = p.X
+		ppts[i].Y = p.Y
+	}
+
+	proj4go.Forwards(projStr, ppts)
+
+	for i, p := range ppts {
+		pts[i].X = p.X
+		pts[i].Y = p.Y
+	}
 
 	nl, _ := NewLoop(pts, l.V, l.H)
 	return nl
