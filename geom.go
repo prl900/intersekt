@@ -6,7 +6,10 @@ import (
 	"math"
 )
 
-type Point = proj4go.Point
+//type Point = proj4go.Point
+type Point struct {
+	X, Y float64
+}
 
 type Interval struct {
 	Lo, Hi float64
