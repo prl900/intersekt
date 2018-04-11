@@ -53,6 +53,7 @@ func Distance(a, b Point) float64 {
 type Loop struct {
 	Vertices []Point
 	Bound    Rect
+	V, H     int
 }
 
 func (l *Loop) Segmentize(maxDist float64) *Loop {
@@ -83,7 +84,7 @@ func (l *Loop) Segmentize(maxDist float64) *Loop {
 		}
 	}
 
-	sl, _ := NewLoop(newPts)
+	sl, _ := NewLoop(newPts, l.V, l.H)
 	return sl
 }
 
@@ -92,7 +93,7 @@ func (l *Loop) Transform(projStr string) *Loop {
 
 	proj4go.Forwards(projStr, pts)
 
-	nl, _ := NewLoop(pts)
+	nl, _ := NewLoop(pts, l.V, l.H)
 	return nl
 }
 
@@ -162,7 +163,7 @@ func (l *Loop) Intersects(o *Loop) bool {
 	return false
 }
 
-func NewLoop(pts []Point) (*Loop, error) {
+func NewLoop(pts []Point, x, y int) (*Loop, error) {
 
 	if len(pts) < 3 || len(pts) < 3 {
 		return nil, fmt.Errorf("Loop has to contain at least 3 points")
@@ -185,5 +186,5 @@ func NewLoop(pts []Point) (*Loop, error) {
 		}
 	}
 
-	return &Loop{pts, rect}, nil
+	return &Loop{pts, rect, x, y}, nil
 }
